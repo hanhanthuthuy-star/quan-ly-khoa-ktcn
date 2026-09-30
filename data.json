@@ -1,0 +1,141 @@
+{
+  "config": {
+    "driveRootUrl": "https://drive.google.com/drive/folders/Khoa_KTCN_HoSoSo_2026",
+    "scheduleSheetUrl": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ_EXAMPLE_SCHEDULE/pubhtml",
+    "teachingSheetUrl": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ_EXAMPLE_TEACHING/pubhtml",
+    "studentFormUrl": "https://forms.google.com/d/e/1FAIpQLSc_FORM_HSSV_EXAMPLE/viewform",
+    "studentFolderUrl": "https://drive.google.com/drive/folders/03_Ho_so_HSSV_SECURE",
+    "ecoSheetUrl": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ_EXAMPLE_ECOFUND/pubhtml",
+    "templateFolderUrl": "https://drive.google.com/drive/folders/06_Van_ban_hanh_chinh"
+  },
+  "ecoFund": {
+    "paperKg": 140,
+    "paperPrice": 5000,
+    "bottlesCount": 1750,
+    "bottlePrice": 500,
+    "donateMoney": 2500000
+  },
+  "schedules": [
+    {
+      "day": "Thứ 2 (20/10)",
+      "task": "Gặp mặt kỷ niệm 96 năm Ngày TL Hội LHPN VN",
+      "owner": "Ban Nữ Công Khoa",
+      "location": "Hội trường B",
+      "status": "Hoàn thành"
+    },
+    {
+      "day": "Thứ 3 (21/10)",
+      "task": "Họp duyệt đề cương chi tiết học phần số hóa",
+      "owner": "Đ/c Thu Hà",
+      "location": "Phòng họp Khoa",
+      "status": "Đang tiến hành"
+    },
+    {
+      "day": "Thứ 4 (22/10)",
+      "task": "Kiểm tra tiến độ nộp hồ sơ HSSV miễn giảm học phí",
+      "owner": "GVCN các lớp",
+      "location": "Văn phòng Khoa",
+      "status": "Chưa bắt đầu"
+    },
+    {
+      "day": "Thứ 6 (24/10)",
+      "task": "Tổng kết thu gom phế liệu Quỹ Nhà Xanh tháng 10",
+      "owner": "Đoàn Thanh niên & Nữ công",
+      "location": "Sảnh Nhà C",
+      "status": "Chưa bắt đầu"
+    }
+  ],
+  "teachings": [
+    {
+      "classCode": "CĐ KT22A",
+      "subject": "Kế toán Doanh nghiệp",
+      "teacher": "Nguyễn Thị Mai",
+      "credits": "45 tiết",
+      "room": "Phòng A201",
+      "note": "Tuần 8"
+    },
+    {
+      "classCode": "CĐ CNTT23B",
+      "subject": "Quản trị Cơ sở dữ liệu",
+      "teacher": "Trần Văn Hùng",
+      "credits": "60 tiết",
+      "room": "Lab 02",
+      "note": "Thực hành"
+    },
+    {
+      "classCode": "CĐ Logistics24A",
+      "subject": "Tổng quan Logistics & Cảng",
+      "teacher": "Lê Thị Lan",
+      "credits": "30 tiết",
+      "room": "Phòng B102",
+      "note": "Lý thuyết"
+    }
+  ],
+  "templates": [
+    {
+      "title": "Mẫu Biên bản Họp Tổ Nữ công / Khoa",
+      "type": "Word (.docx)",
+      "icon": "fa-file-word",
+      "color": "text-blue-600 bg-blue-50",
+      "url": "https://docs.google.com/document/d/MOCK_TEMPLATE_1/edit"
+    },
+    {
+      "title": "Mẫu Báo cáo Tiến độ Giảng dạy & Bài giảng",
+      "type": "Excel (.xlsx)",
+      "icon": "fa-file-excel",
+      "color": "text-emerald-600 bg-emerald-50",
+      "url": "https://docs.google.com/spreadsheets/d/MOCK_TEMPLATE_2/edit"
+    },
+    {
+      "title": "Mẫu Đơn Đề nghị Miễn giảm Học phí HSSV",
+      "type": "PDF / Word",
+      "icon": "fa-file-pdf",
+      "color": "text-rose-600 bg-rose-50",
+      "url": "https://docs.google.com/document/d/MOCK_TEMPLATE_3/edit"
+    },
+    {
+      "title": "Quy chuẩn ISO đặt tên file & Lưu trữ số 2026",
+      "type": "Văn bản hướng dẫn",
+      "icon": "fa-file-shield",
+      "color": "text-purple-600 bg-purple-50",
+      "url": "https://drive.google.com"
+    }
+  ],
+  "securityChecklist": [
+    {
+      "text": "1. Bật xác thực hai lớp (2FA) cho tài khoản Google của khoa.",
+      "desc": "Bảo vệ tài khoản tránh bị chiếm quyền điều khiển.",
+      "checked": true
+    },
+    {
+      "text": "2. Không gửi file chứa thông tin HSSV (CCCD, ngày sinh) qua Zalo/Facebook.",
+      "desc": "Tuân thủ Nghị định bảo vệ dữ liệu cá nhân.",
+      "checked": true
+    },
+    {
+      "text": "3. Chỉ chia sẻ link Drive ở chế độ 'Restricted' (Chỉ người được mời).",
+      "desc": "Tuyệt đối không bật 'Anyone with the link' đối với hồ sơ nhạy cảm.",
+      "checked": true
+    },
+    {
+      "text": "4. Đặt tên file theo cấu trúc chuẩn ISO: Năm_Tháng_Loại_TênLớp.",
+      "desc": "Đảm bảo tính khoa học và tra cứu nhanh chóng.",
+      "checked": true
+    },
+    {
+      "text": "5. Định kỳ 3 tháng rà soát và dọn dẹp các phiên bản file rác/file nháp.",
+      "desc": "Tối ưu hóa dung lượng đám mây dùng chung của khoa.",
+      "checked": true
+    },
+    {
+      "text": "6. Khóa màn hình máy tính làm việc khi rời khỏi bàn làm việc.",
+      "desc": "Đảm bảo an toàn vật lý tại văn phòng khoa.",
+      "checked": true
+    },
+    {
+      "text": "7. Cảnh giác với email lạ mạo danh và không bấm link không rõ nguồn gốc.",
+      "desc": "Báo ngay cho tổ CNTT/Lãnh đạo khi nghi ngờ bị lừa đảo.",
+      "checked": false
+    }
+  ]
+}
