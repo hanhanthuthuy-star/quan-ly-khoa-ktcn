@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HỆ THỐNG QUẢN LÝ SỐ HÓA - KHOA KINHTẾ - CÔNG NGHỆ</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- QRCodeJS Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#035485',
+                            800: '#075985',
+                        },
+                        eco: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- HEADER -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo & Title -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-eco-500 flex items-center justify-center text-white font-bold text-xl shadow-md">
+                        <i class="fa-solid font-bold fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">
+                            KHOA KINH TẾ - CÔNG NGHỆ
+                        </h1>
+                        <p class="text-xs text-slate-500 hidden sm:block">Trường Cao đẳng Hàng hải và Đường thủy I</p>
+                    </div>
+                </div>
+
+                <!-- Search Bar & Actions -->
+                <div class="flex items-center space-x-4">
+                    <div class="relative hidden md:block w-64">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-magnifying-glass text-sm"></i>
+                        </span>
+                        <input type="text" id="searchInput" onkeyup="handleQuickSearch()" placeholder="Tìm kiếm nhanh biểu mẫu, lịch..." class="w-full pl-9 pr-4 py-1.5 bg-slate-100 text-sm border-0 rounded-lg focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all outline-none">
+                    </div>
+                    
+                    <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-slate-600 hover:text-slate-900 rounded-lg focus:outline-none">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                    
+                    <span class="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-eco-100 text-eco-700 border border-eco-200">
+                        <i class="fa-solid fa-leaf mr-1.5 text-eco-600"></i> Sáng kiến Số 2026
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <div class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col md:flex-row gap-6">
+        
+        <!-- SIDEBAR -->
+        <aside id="sidebar" class="w-full md:w-64 flex-shrink-0 bg-white rounded-2xl border border-slate-200 p-4 shadow-sm h-fit hidden md:block">
+            <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider px-3 mb-3">Danh Mục Quản Lý</div>
+            <nav class="space-y-1">
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn active w-full flex items-center space-x-3 px-3 py-2.5 text-sm font-medium rounded-xl transition-colors bg-brand-50 text-brand-700">
+                    <i class="fa-solid fa-chart-pie w-5 text-center text-brand-600"></i>
+                    <span>Tổng quan Dashboard</span>
+                </button>
+                <button onclick="switchTab('schedule')" id="nav-schedule" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl transition-colors">
+                    <i class="fa-solid fa-calendar-week w-5 text-center text-indigo-500"></i>
+                    <span>Lịch công tác tuần</span>
+                </button>
+                <button onclick="switchTab('teaching')" id="nav-teaching" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl transition-colors">
+                    <i class="fa-solid fa-chalkboard-user w-5 text-center text-sky-500"></i>
+                    <span>Phân công giảng dạy</span>
+                </button>
+                <button onclick="switchTab('students')" id="nav-students" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl transition-colors">
+                    <i class="fa-solid fa-folder-open w-5 text-center text-amber-500"></i>
+                    <span>Hồ sơ HSSV</span>
+                </button>
+                <button onclick="switchTab('ecofund')" id="nav-ecofund" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl transition-colors">
+                    <i class="fa-solid fa-seedling w-5 text-center text-eco-600"></i>
+                    <span>Quỹ Nhà Xanh & Học Bổng</span>
+                </button>
+                <button onclick="switchTab('templates')" id="nav-templates" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl transition-colors">
+                    <i class="fa-solid fa-file-lines w-5 text-center text-purple-500"></i>
+                    <span>Tủ biểu mẫu & Drive</span>
+                </button>
+                <button onclick="switchTab('security')" id="nav-security" class="nav-btn w-full flex items-center space-x-3 px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl transition-colors">
+                    <i class="fa-solid fa-shield-halved w-5 text-center text-rose-500"></i>
+                    <span>Checklist Bảo mật</span>
+                </button>
+            </nav>
+
+            <div class="mt-6 pt-6 border-t border-slate-100">
+                <div class="bg-gradient-to-br from-brand-50 to-eco-50 rounded-xl p-3 border border-slate-200/60">
+                    <div class="flex items-center space-x-2 text-xs font-semibold text-slate-700 mb-1">
+                        <i class="fa-solid fa-qrcode text-brand-600"></i>
+                        <span>Bộ mã QR Nhanh</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mb-3">Tạo nhanh QR Code cho liên kết bất kỳ để gửi Zalo/In ấn.</p>
+                    <button onclick="openQRModal('Thư mục Gốc Drive', 'https://drive.google.com')" class="w-full bg-white text-xs font-medium text-slate-700 py-1.5 px-2 rounded-lg border border-slate-200 hover:bg-slate-50 shadow-sm flex items-center justify-center space-x-1">
+                        <i class="fa-solid fa-qrcode"></i>
+                        <span>Tạo Mã QR Mới</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="flex-1 min-w-0">
+            
+            <!-- TAB: DASHBOARD TỔNG QUAN -->
+            <div id="tab-dashboard" class="tab-content space-y-6">
+                <!-- Welcome Banner -->
+                <div class="bg-gradient-to-r from-brand-700 via-brand-600 to-eco-600 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
+                    <div class="absolute right-0 top-0 bottom-0 opacity-10 flex items-center pr-10 pointer-events-none">
+                        <i class="fa-solid fa-network-wired text-9xl"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-medium mb-3">Tổ Nữ công - Khoa KTCN</span>
+                        <h2 class="text-2xl sm:text-3xl font-bold mb-2">Không Gian Làm Việc Số Tập Trung</h2>
+                        <p class="text-brand-100 text-sm max-w-2xl">
+                            Giải pháp kết nối Google Workspace, Mã QR và Quy trình quản lý bảo mật giúp giảm bớt thời gian tra cứu, minh bạch tiến độ và hỗ trợ cân bằng công việc.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- WIDGETS STATS -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-medium text-slate-500">Sự kiện / Lịch tuần</p>
+                                <h3 class="text-2xl font-bold text-slate-800 mt-1">12</h3>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-calendar-check"></i>
+                            </div>
+                        </div>
+                        <p class="text-xs text-indigo-600 mt-3 font-medium"><i class="fa-solid fa-clock mr-1"></i>3 cuộc họp trọng tâm</p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-medium text-slate-500">Hồ sơ HSSV đã xử lý</p>
+                                <h3 class="text-2xl font-bold text-slate-800 mt-1">84/92</h3>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-folder-check"></i>
+                            </div>
+                        </div>
+                        <p class="text-xs text-amber-600 mt-3 font-medium"><i class="fa-solid fa-chart-line mr-1"></i>Đạt 91% tiến độ</p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-medium text-slate-500">Số dư Quỹ Nhà Xanh</p>
+                                <h3 class="text-2xl font-bold text-eco-700 mt-1">3.450.000đ</h3>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-eco-50 text-eco-600 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-recycle"></i>
+                            </div>
+                        </div>
+                        <p class="text-xs text-eco-600 mt-3 font-medium"><i class="fa-solid fa-arrow-up mr-1"></i>+420.000đ tuần này</p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs font-medium text-slate-500">Tuân thủ Bảo mật</p>
+                                <h3 class="text-2xl font-bold text-rose-600 mt-1" id="dashSecurityScore">6/7</h3>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-shield-check"></i>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-3 font-medium" id="dashSecurityStatus">An toàn dữ liệu cao</p>
+                    </div>
+                </div>
+
+                <!-- QUICK ACCESS CARDS -->
+                <div>
+                    <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center">
+                        <i class="fa-solid fa-bolt text-amber-500 mr-2"></i> Truy Cập Nhanh & Tạo QR
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        
+                        <!-- Card 1 -->
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 hover:border-brand-300 hover:shadow-md transition-all flex flex-col justify-between">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                                    <i class="fa-solid fa-calendar-days text-lg"></i>
+                                </div>
+                                <button onclick="openQRModal('Lịch Công Tác Tuần', 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ_EXAMPLE_SCHEDULE/pubhtml')" class="text-slate-400 hover:text-brand-600 p-1 rounded" title="Tạo mã QR">
+                                    <i class="fa-solid fa-qrcode text-lg"></i>
+                                </button>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">Lịch Công Tác Tuần</h4>
+                                <p class="text-xs text-slate-500 mt-1">Theo dõi thời gian, địa điểm, người phụ trách và trạng thái họp.</p>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                                <button onclick="switchTab('schedule')" class="text-xs font-semibold text-brand-600 hover:text-brand-700 flex items-center">
+                                    Xem chi tiết <i class="fa-solid fa-arrow-right ml-1 text-[10px]"></i>
+                                </button>
+                                <span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded text-slate-600">Google Sheet</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 hover:border-brand-300 hover:shadow-md transition-all flex flex-col justify-between">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="w-10 h-10 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center">
+                                    <i class="fa-solid fa-chalkboard text-lg"></i>
+                                </div>
+                                <button onclick="openQRModal('Phân Công Giảng Dạy', 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ_EXAMPLE_TEACHING/pubhtml')" class="text-slate-400 hover:text-brand-600 p-1 rounded" title="Tạo mã QR">
+                                    <i class="fa-solid fa-qrcode text-lg"></i>
+                                </button>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">Phân Công Giảng Dạy</h4>
+                                <p class="text-xs text-slate-500 mt-1">Tra cứu số tiết, phòng học, lớp đảm nhận và lịch dạy giảng viên.</p>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                                <button onclick="switchTab('teaching')" class="text-xs font-semibold text-brand-600 hover:text-brand-700 flex items-center">
+                                    Xem chi tiết <i class="fa-solid fa-arrow-right ml-1 text-[10px]"></i>
+                                </button>
+                                <span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded text-slate-600">Google Sheet</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 hover:border-brand-300 hover:shadow-md transition-all flex flex-col justify-between">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="w-10 h-10 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
+                                    <i class="fa-solid fa-user-graduate text-lg"></i>
+                                </div>
+                                <button onclick="openQRModal('Quản Lý Hồ Sơ HSSV', 'https://drive.google.com/drive/folders/EXAMPLE_STUDENTS')" class="text-slate-400 hover:text-brand-600 p-1 rounded" title="Tạo mã QR">
+                                    <i class="fa-solid fa-qrcode text-lg"></i>
+                                </button>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">Hồ Sơ HSSV & Nộp File</h4>
+                                <p class="text-xs text-slate-500 mt-1">Nộp biên bản, hồ sơ rèn luyện, miễn giảm học phí an toàn.</p>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                                <button onclick="switchTab('students')" class="text-xs font-semibold text-brand-600 hover:text-brand-700 flex items-center">
+                                    Xem chi tiết <i class="fa-solid fa-arrow-right ml-1 text-[10px]"></i>
+                                </button>
+                                <span class="text-[10px] bg-amber-50 text-amber-700 px-2 py-0.5 rounded font-medium">Bảo mật cao</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 4 -->
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 hover:border-brand-300 hover:shadow-md transition-all flex flex-col justify-between">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="w-10 h-10 rounded-lg bg-eco-50 text-eco-600 flex items-center justify-center">
+                                    <i class="fa-solid fa-leaf text-lg"></i>
+                                </div>
+                                <button onclick="openQRModal('Quỹ Nhà Xanh', 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ_EXAMPLE_ECO/pubhtml')" class="text-slate-400 hover:text-brand-600 p-1 rounded" title="Tạo mã QR">
+                                    <i class="fa-solid fa-qrcode text-lg"></i>
+                                </button>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">Quỹ "Nhà Xanh"</h4>
+                                <p class="text-xs text-slate-500 mt-1">Minh bạch hoạt động thu gom phế liệu, tái chế và quyên góp quỹ.</p>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                                <button onclick="switchTab('ecofund')" class="text-xs font-semibold text-brand-600 hover:text-brand-700 flex items-center">
+                                    Xem chi tiết <i class="fa-solid fa-arrow-right ml-1 text-[10px]"></i>
+                                </button>
+                                <span class="text-[10px] bg-eco-50 text-eco-700 px-2 py-0.5 rounded font-medium">Sáng kiến xanh</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 5 -->
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 hover:border-brand-300 hover:shadow-md transition-all flex flex-col justify-between">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="w-10 h-10 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center">
+                                    <i class="fa-solid fa-box-archive text-lg"></i>
+                                </div>
+                                <button onclick="openQRModal('Tủ Biểu Mẫu Hành Chính', 'https://drive.google.com/drive/folders/EXAMPLE_TEMPLATES')" class="text-slate-400 hover:text-brand-600 p-1 rounded" title="Tạo mã QR">
+                                    <i class="fa-solid fa-qrcode text-lg"></i>
+                                </button>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">Tủ Biểu Mẫu Hành Chính</h4>
+                                <p class="text-xs text-slate-500 mt-1">Kho mẫu đơn, kế hoạch, đề thi, quy trình chuẩn ISO của Khoa.</p>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                                <button onclick="switchTab('templates')" class="text-xs font-semibold text-brand-600 hover:text-brand-700 flex items-center">
+                                    Xem chi tiết <i class="fa-solid fa-arrow-right ml-1 text-[10px]"></i>
+                                </button>
+                                <span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded text-slate-600">Google Drive</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 6 -->
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 hover:border-brand-300 hover:shadow-md transition-all flex flex-col justify-between">
+                            <div class="flex items-start justify-between mb-3">
+                                <div class="w-10 h-10 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center">
+                                    <i class="fa-solid fa-user-shield text-lg"></i>
+                                </div>
+                                <button onclick="openQRModal('Hướng Dẫn & Bảo Mật', 'https://khoaktcn.edu.vn/baomat')" class="text-slate-400 hover:text-brand-600 p-1 rounded" title="Tạo mã QR">
+                                    <i class="fa-solid fa-qrcode text-lg"></i>
+                                </button>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">Checklist & Bảo Mật</h4>
+                                <p class="text-xs text-slate-500 mt-1">Quy tắc đặt tên file, chia sẻ quyền Drive và phòng tránh lừa đảo.</p>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                                <button onclick="switchTab('security')" class="text-xs font-semibold text-brand-600 hover:text-brand-700 flex items-center">
+                                    Xem chi tiết <i class="fa-solid fa-arrow-right ml-1 text-[10px]"></i>
+                                </button>
+                                <span class="text-[10px] bg-rose-50 text-rose-700 px-2 py-0.5 rounded font-medium">Bắt buộc</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: LỊCH CÔNG TÁC -->
+            <div id="tab-schedule" class="tab-content hidden space-y-4">
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 flex items-center justify-between">
+                    <div>
+                        <h3 class="font-bold text-slate-800">Lịch Công Tác Tuần Khoa KTCN</h3>
+                        <p class="text-xs text-slate-500">Cập nhật tự động thời gian, địa điểm họp và phân công nhiệm vụ.</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="openQRModal('Lịch Công Tác Tuần', 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ_EXAMPLE_SCHEDULE/pubhtml')" class="px-3 py-1.5 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium flex items-center">
+                            <i class="fa-solid fa-qrcode mr-1.5"></i> QR Lịch
+                        </button>
+                        <a href="https://docs.google.com" target="_blank" class="px-3 py-1.5 text-xs bg-brand-600 hover:bg-brand-700 text-white rounded-lg font-medium flex items-center">
+                            <i class="fa-solid fa-external-link mr-1.5"></i> Mở Google Sheet
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Mock Embedded Google Sheet Table -->
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                    <div class="p-3 bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 flex justify-between">
+                        <span><i class="fa-solid fa-table mr-1"></i> DỮ LIỆU ĐỒNG BỘ THỜI GIAN THỰC</span>
+                        <span class="text-eco-600"><i class="fa-solid fa-circle text-[8px] mr-1"></i> Trực tuyến</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-slate-600">
+                            <thead class="bg-slate-100 uppercase text-[10px] font-bold text-slate-500">
+                                <tr>
+                                    <th class="p-3">Thứ / Ngày</th>
+                                    <th class="p-3">Nội dung công việc</th>
+                                    <th class="p-3">Người phụ trách</th>
+                                    <th class="p-3">Địa điểm</th>
+                                    <th class="p-3">Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                <tr>
+                                    <td class="p-3 font-semibold text-slate-800">Thứ 2 (20/10)</td>
+                                    <td class="p-3">Gặp mặt chào mừng 96 năm Ngày thành lập Hội LHPN VN</td>
+                                    <td class="p-3">Ban Nữ Công Khoa</td>
+                                    <td class="p-3">Hội trường B</td>
+                                    <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-medium">Hoàn thành</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-slate-800">Thứ 3 (21/10)</td>
+                                    <td class="p-3">Họp duyệt đề cương chi tiết học phần môn Kế toán</td>
+                                    <td class="p-3">Đồng chí Thu Hà</td>
+                                    <td class="p-3">Phòng họp Khoa</td>
+                                    <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-medium">Đang tiến hành</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-slate-800">Thứ 4 (22/10)</td>
+                                    <td class="p-3">Rà soát tiến độ nộp hồ sơ HSSV miễn giảm học phí</td>
+                                    <td class="p-3">GVCN các lớp</td>
+                                    <td class="p-3">Văn phòng Khoa</td>
+                                    <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-medium">Chưa bắt đầu</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: PHÂN CÔNG GIẢNG DẠY -->
+            <div id="tab-teaching" class="tab-content hidden space-y-4">
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 flex items-center justify-between">
+                    <div>
+                        <h3 class="font-bold text-slate-800">Phân Công Giảng Dạy & Lịch Học</h3>
+                        <p class="text-xs text-slate-500">Tra cứu tiến độ học phần, số tiết và phòng học giảng viên.</p>
+                    </div>
+                    <button onclick="openQRModal('Phân Công Giảng Dạy', 'https://docs.google.com')" class="px-3 py-1.5 text-xs bg-brand-600 hover:bg-brand-700 text-white rounded-lg font-medium">
+                        <i class="fa-solid fa-qrcode mr-1"></i> QR Mã Lịch Dạy
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-slate-600">
+                            <thead class="bg-slate-100 uppercase text-[10px] font-bold text-slate-500">
+                                <tr>
+                                    <th class="p-3">Lớp</th>
+                                    <th class="p-3">Môn học</th>
+                                    <th class="p-3">Giảng viên</th>
+                                    <th class="p-3">Số tiết</th>
+                                    <th class="p-3">Phòng học</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                <tr>
+                                    <td class="p-3 font-semibold">CĐ KT22A</td>
+                                    <td class="p-3">Kế toán Doanh nghiệp</td>
+                                    <td class="p-3">Nguyễn Thị Mai</td>
+                                    <td class="p-3">45 tiết</td>
+                                    <td class="p-3">Phòng A201</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold">CĐ CNTT23B</td>
+                                    <td class="p-3">Quản trị Cơ sở dữ liệu</td>
+                                    <td class="p-3">Trần Văn Hùng</td>
+                                    <td class="p-3">60 tiết</td>
+                                    <td class="p-3">Lab 02</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: HỒ SƠ HSSV -->
+            <div id="tab-students" class="tab-content hidden space-y-4">
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 flex items-center justify-between">
+                    <div>
+                        <h3 class="font-bold text-slate-800">Quản Lý Hồ Sơ HSSV & Nộp Văn Bản</h3>
+                        <p class="text-xs text-slate-500">Tiếp nhận hồ sơ điện tử, giảm thiểu giấy tờ và gửi file qua mạng xã hội.</p>
+                    </div>
+                    <button onclick="openQRModal('Nộp Hồ Sơ HSSV', 'https://forms.google.com')" class="px-3 py-1.5 text-xs bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-medium">
+                        <i class="fa-solid fa-upload mr-1"></i> Form Nộp Hồ Sơ
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                        <h4 class="font-bold text-slate-800 text-sm mb-3 flex items-center">
+                            <i class="fa-solid fa-cloud-arrow-up text-brand-600 mr-2"></i> Tải Lên Hồ Sơ Mới
+                        </h4>
+                        <p class="text-xs text-slate-500 mb-4">Các loại hồ sơ: Biên bản sinh hoạt lớp, đơn xin miễn giảm, danh sách rèn luyện tháng.</p>
+                        <a href="https://drive.google.com" target="_blank" class="block w-full py-2.5 text-center bg-brand-50 hover:bg-brand-100 text-brand-700 font-semibold text-xs rounded-xl border border-brand-200 transition-colors">
+                            Truy Cập Thư Mục Google Drive HSSV
+                        </a>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                        <h4 class="font-bold text-slate-800 text-sm mb-3 flex items-center">
+                            <i class="fa-solid fa-list-check text-eco-600 mr-2"></i> Quy Quy Chuẩn Đặt Tên File
+                        </h4>
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs font-mono text-slate-700 space-y-1">
+                            <p class="text-slate-500 font-sans font-medium text-[11px] mb-1">Cấu trúc đặt tên chuẩn:</p>
+                            <p class="text-brand-700 font-bold">[Năm]_[Tháng]_[LoaiHoSo]_[TenLop]</p>
+                            <p class="text-slate-500 text-[11px] mt-2 font-sans">Ví dụ: <span class="font-mono text-slate-800">2026_10_BienBanHop_CDKT22A</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: QUỸ NHÀ XANH -->
+            <div id="tab-ecofund" class="tab-content hidden space-y-4">
+                <div class="bg-gradient-to-r from-eco-700 to-eco-600 p-6 rounded-2xl text-white shadow-md">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span class="px-2.5 py-0.5 bg-white/20 rounded-full text-xs font-medium">Sáng kiến môi trường & Khuyến học</span>
+                            <h3 class="text-xl font-bold mt-2">Mô Hình Quỹ "Nhà Xanh" Khoa KTCN</h3>
+                            <p class="text-eco-100 text-xs mt-1">Phân loại phế liệu, thu gom giấy vụn/chai nhựa tạo quỹ học bổng cho HSSV vượt khó.</p>
+                        </div>
+                        <div class="text-right hidden sm:block">
+                            <p class="text-xs text-eco-200">Tổng quỹ hiện tại</p>
+                            <p class="text-3xl font-extrabold text-white">3.450.000 VNĐ</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 text-center">
+                        <div class="w-10 h-10 bg-eco-50 text-eco-600 rounded-full flex items-center justify-center mx-auto mb-2 text-lg">
+                            <i class="fa-solid fa-box font-bold"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-sm">Giấy vụn / Giấy in</h4>
+                        <p class="text-2xl font-bold text-eco-600 my-1">128 kg</p>
+                        <p class="text-[11px] text-slate-400">Đã quy đổi: 640.000đ</p>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 text-center">
+                        <div class="w-10 h-10 bg-sky-50 text-sky-600 rounded-full flex items-center justify-center mx-auto mb-2 text-lg">
+                            <i class="fa-solid fa-bottle-water"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-sm">Vỏ chai nhựa / Lon</h4>
+                        <p class="text-2xl font-bold text-sky-600 my-1">1.450 chiếc</p>
+                        <p class="text-[11px] text-slate-400">Đã quy đổi: 810.000đ</p>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 text-center">
+                        <div class="w-10 h-10 bg-amber-50 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-2 text-lg">
+                            <i class="fa-solid fa-hand-holding-heart"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-sm">Ủng hộ Khuyến học</h4>
+                        <p class="text-2xl font-bold text-amber-600 my-1">2.000.000đ</p>
+                        <p class="text-[11px] text-slate-400">Từ CBVCLĐ & Mạnh thường quân</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: TỦ BIỂU MẪU -->
+            <div id="tab-templates" class="tab-content hidden space-y-4">
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 flex items-center justify-between">
+                    <div>
+                        <h3 class="font-bold text-slate-800">Kho Biểu Mẫu & Văn Bản Hành Chính</h3>
+                        <p class="text-xs text-slate-500">Tải về mẫu kế hoạch, biên bản họp, đề thi chuẩn của Trường và Khoa.</p>
+                    </div>
+                    <button onclick="openQRModal('Tủ Biểu Mẫu Hành Chính', 'https://drive.google.com')" class="px-3 py-1.5 text-xs bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium">
+                        <i class="fa-solid fa-qrcode mr-1"></i> QR Biểu Mẫu
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 flex items-center space-x-3 hover:border-brand-300 transition-colors cursor-pointer">
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl flex-shrink-0">
+                            <i class="fa-solid fa-file-word"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="font-bold text-slate-800 text-xs truncate">Mẫu Biên bản Họp Tổ Nữ công / Khoa</h4>
+                            <p class="text-[11px] text-slate-400">Định dạng .docx • Cập nhật 2026</p>
+                        </div>
+                        <a href="#" class="text-slate-400 hover:text-brand-600 p-2"><i class="fa-solid fa-download"></i></a>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 flex items-center space-x-3 hover:border-brand-300 transition-colors cursor-pointer">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl flex-shrink-0">
+                            <i class="fa-solid fa-file-excel"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="font-bold text-slate-800 text-xs truncate">Mẫu Mẫu Báo cáo Tiến độ Giảng dạy</h4>
+                            <p class="text-[11px] text-slate-400">Định dạng .xlsx • Cập nhật 2026</p>
+                        </div>
+                        <a href="#" class="text-slate-400 hover:text-brand-600 p-2"><i class="fa-solid fa-download"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: CHECKLIST BẢO MẬT -->
+            <div id="tab-security" class="tab-content hidden space-y-4">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="font-bold text-slate-800 flex items-center text-base">
+                                <i class="fa-solid fa-shield-halved text-rose-500 mr-2"></i> Checklist Tuân Thủ Bảo Mật Dữ Liệu
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Áp dụng bắt buộc khi xử lý thông tin HSSV và dữ liệu nội bộ khoa.</p>
+                        </div>
+                        <span id="securityProgressBadge" class="text-xs font-bold bg-rose-100 text-rose-700 px-3 py-1 rounded-full">
+                            Tiến độ: 85%
+                        </span>
+                    </div>
+
+                    <div class="space-y-3" id="securityChecklist">
+                        
+                        <label class="flex items-start space-x-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors">
+                            <input type="checkbox" checked onchange="updateSecurityProgress()" class="mt-0.5 rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+                            <div>
+                                <p class="text-xs font-semibold text-slate-800">1. Bật xác thực 2 lớp (2FA) cho Tài khoản Google Khoa</p>
+                                <p class="text-[11px] text-slate-500">Bảo vệ tài khoản tránh bị chiếm quyền điều khiển.</p>
+                            </div>
+                        </label>
+
+                        <label class="flex items-start space-x-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors">
+                            <input type="checkbox" checked onchange="updateSecurityProgress()" class="mt-0.5 rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+                            <div>
+                                <p class="text-xs font-semibold text-slate-800">2. Không gửi file chứa thông tin nhạy cảm qua Zalo / Facebook</p>
+                                <p class="text-[11px] text-slate-500">Tránh lộ CCCD, ngày sinh, hoàn cảnh gia đình của HSSV trên các hội nhóm public.</p>
+                            </div>
+                        </label>
+
+                        <label class="flex items-start space-x-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors">
+                            <input type="checkbox" checked onchange="updateSecurityProgress()" class="mt-0.5 rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+                            <div>
+                                <p class="text-xs font-semibold text-slate-800">3. Phân quyền Google Drive dạng "Restricted" (Giới hạn)</p>
+                                <p class="text-[11px] text-slate-500">Tuyệt đối không chọn "Anyone with the link" đối với các dữ liệu quản lý nội bộ.</p>
+                            </div>
+                        </label>
+
+                        <label class="flex items-start space-x-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors">
+                            <input type="checkbox" checked onchange="updateSecurityProgress()" class="mt-0.5 rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+                            <div>
+                                <p class="text-xs font-semibold text-slate-800">4. Đặt tên file theo cấu trúc chuẩn ISO</p>
+                                <p class="text-[11px] text-slate-500">Ví dụ: <code class="bg-slate-100 px-1 rounded">2026_10_BienBanHop_ToNuCong</code></p>
+                            </div>
+                        </label>
+
+                        <label class="flex items-start space-x-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors">
+                            <input type="checkbox" checked onchange="updateSecurityProgress()" class="mt-0.5 rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+                            <div>
+                                <p class="text-xs font-semibold text-slate-800">5. Rà soát và xóa các bản nháp/file rác định kỳ 3 tháng</p>
+                                <p class="text-[11px] text-slate-500">Tối ưu dung lượng lưu trữ Google Drive của khoa.</p>
+                            </div>
+                        </label>
+
+                        <label class="flex items-start space-x-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors">
+                            <input type="checkbox" checked onchange="updateSecurityProgress()" class="mt-0.5 rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+                            <div>
+                                <p class="text-xs font-semibold text-slate-800">6. Khóa mật khẩu máy tính làm việc cá nhân</p>
+                                <p class="text-[11px] text-slate-500">Đảm bảo không lộ thông tin khi rời khỏi bàn làm việc tại văn phòng khoa.</p>
+                            </div>
+                        </label>
+
+                        <label class="flex items-start space-x-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 cursor-pointer transition-colors">
+                            <input type="checkbox" onchange="updateSecurityProgress()" class="mt-0.5 rounded text-brand-600 focus:ring-brand-500 w-4 h-4">
+                            <div>
+                                <p class="text-xs font-semibold text-slate-800">7. Kiểm tra link lạ và báo cáo khi nghi ngờ bị lừa đảo trực tuyến</p>
+                                <p class="text-[11px] text-slate-500">Cảnh giác với email mạo danh ban giám hiệu hoặc thông báo tài khoản bị khóa.</p>
+                            </div>
+                        </label>
+
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- MODAL HIỂN THỊ MÃ QR -->
+    <div id="qrModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative text-center">
+            <button onclick="closeQRModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div class="w-12 h-12 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center mx-auto mb-3">
+                <i class="fa-solid fa-qrcode text-xl"></i>
+            </div>
+            <h3 id="qrModalTitle" class="font-bold text-slate-800 text-base mb-1">Mã QR Truy Cập</h3>
+            <p class="text-xs text-slate-500 mb-4">Quét mã bằng camera điện thoại hoặc Zalo để mở liên kết.</p>
+            
+            <div class="flex justify-center bg-slate-50 p-4 rounded-xl border border-slate-200 mb-4" id="qrcodeCanvas"></div>
+            
+            <div class="space-y-2">
+                <button onclick="copyQRLink()" class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-colors flex items-center justify-center">
+                    <i class="fa-solid fa-copy mr-1.5"></i> Sao chép Liên kết
+                </button>
+                <p id="copySuccessMsg" class="text-[10px] text-emerald-600 hidden font-medium">Đã sao chép liên kết vào bộ nhớ tạm!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-slate-200 mt-auto py-4">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500">
+            <p>© 2026 Ban Nữ công – Khoa Kinh tế - Công nghệ | Trường Cao đẳng Hàng hải và Đường thủy I</p>
+            <p class="text-[11px] text-slate-400 mt-1">Sản phẩm dự thi "Nữ CBVCLĐ MIC1 Làm chủ công nghệ số"</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        let currentQRUrl = '';
+
+        // Chuyển đổi Tab
+        function switchTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            // Show selected tab content
+            const activeTab = document.getElementById('tab-' + tabId);
+            if(activeTab) activeTab.classList.remove('hidden');
+
+            // Update nav buttons style
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-brand-50', 'text-brand-700');
+                btn.classList.add('text-slate-600');
+            });
+            
+            const activeBtn = document.getElementById('nav-' + tabId);
+            if(activeBtn) {
+                activeBtn.classList.add('active', 'bg-brand-50', 'text-brand-700');
+                activeBtn.classList.remove('text-slate-600');
+            }
+
+            // Close mobile menu if open
+            const sidebar = document.getElementById('sidebar');
+            if(window.innerWidth < 768) {
+                sidebar.classList.add('hidden');
+            }
+        }
+
+        // Bật / Tắt Menu Mobile
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('hidden');
+        }
+
+        // Hiển thị Modal Mã QR
+        function openQRModal(title, url) {
+            currentQRUrl = url;
+            document.getElementById('qrModalTitle').innerText = title;
+            const qrContainer = document.getElementById('qrcodeCanvas');
+            qrContainer.innerHTML = ''; // Clear previous QR
+            
+            // Generate QR Code
+            new QRCode(qrContainer, {
+                text: url,
+                width: 180,
+                height: 180,
+                colorDark: "#0369a1",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            document.getElementById('copySuccessMsg').classList.add('hidden');
+            document.getElementById('qrModal').classList.remove('hidden');
+        }
+
+        // Đóng Modal QR
+        function closeQRModal() {
+            document.getElementById('qrModal').classList.add('hidden');
+        }
+
+        // Copy Link
+        function copyQRLink() {
+            if(currentQRUrl) {
+                const tempInput = document.createElement('input');
+                tempInput.value = currentQRUrl;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+                
+                const msg = document.getElementById('copySuccessMsg');
+                msg.classList.remove('hidden');
+                setTimeout(() => msg.classList.add('hidden'), 2500);
+            }
+        }
+
+        // Cập nhật tiến độ Bảo mật
+        function updateSecurityProgress() {
+            const checkboxes = document.querySelectorAll('#securityChecklist input[type="checkbox"]');
+            let total = checkboxes.length;
+            let checkedCount = 0;
+            
+            checkboxes.forEach(cb => {
+                if(cb.checked) checkedCount++;
+            });
+
+            const percent = Math.round((checkedCount / total) * 100);
+            
+            // Update Dashboard Stat Widget
+            const dashScore = document.getElementById('dashSecurityScore');
+            const dashStatus = document.getElementById('dashSecurityStatus');
+            if(dashScore) dashScore.innerText = `${checkedCount}/${total}`;
+            if(dashStatus) dashStatus.innerText = percent === 100 ? 'Tuân thủ hoàn hảo!' : `Đạt ${percent}% tiêu chuẩn`;
+
+            // Update Badge in Security Tab
+            const badge = document.getElementById('securityProgressBadge');
+            if(badge) {
+                badge.innerText = `Tiến độ: ${percent}%`;
+                if(percent === 100) {
+                    badge.className = "text-xs font-bold bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full";
+                } else {
+                    badge.className = "text-xs font-bold bg-rose-100 text-rose-700 px-3 py-1 rounded-full";
+                }
+            }
+        }
+
+        // Tìm kiếm nhanh
+        function handleQuickSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            if(query.trim() === '') return;
+            
+            // Auto switch to matching section based on search query
+            if(query.includes('lịch') || query.includes('họp')) {
+                switchTab('schedule');
+            } else if(query.includes('giảng') || query.includes('dạy') || query.includes('tiết')) {
+                switchTab('teaching');
+            } else if(query.includes('hồ sơ') || query.includes('sinh viên') || query.includes('hssv')) {
+                switchTab('students');
+            } else if(query.includes('quỹ') || query.includes('nhà xanh') || query.includes('rác')) {
+                switchTab('ecofund');
+            } else if(query.includes('mẫu') || query.includes('biểu') || query.includes('văn bản')) {
+                switchTab('templates');
+            } else if(query.includes('bảo mật') || query.includes('mật khẩu')) {
+                switchTab('security');
+            }
+        }
+
+        // Initialize default state on page load
+        window.onload = function() {
+            updateSecurityProgress();
+        };
+    </script>
+</body>
+</html>
