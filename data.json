@@ -1,9 +1,9 @@
 {
   "config": {
-    "driveRootUrl": "https://drive.google.com/drive/folders/Khoa_KTCN_HoSoSo_2026",
+    "driveRootUrl": "https://drive.google.com/drive/folders/1e1igF-2muKWy5VWjzmtmpm_YB7qxK5lk?usp=sharing",
     "scheduleSheetUrl": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ_EXAMPLE_SCHEDULE/pubhtml",
     "teachingSheetUrl": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ_EXAMPLE_TEACHING/pubhtml",
-    "studentFormUrl": "https://forms.google.com/d/e/1FAIpQLSc_FORM_HSSV_EXAMPLE/viewform",
+    "studentFormUrl": "https://drive.google.com/drive/folders/1KYK5Krpx_sh5LZMyK_H7USEQ1h9xg18X?usp=drive_link",
     "studentFolderUrl": "https://drive.google.com/drive/folders/03_Ho_so_HSSV_SECURE",
     "ecoSheetUrl": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ_EXAMPLE_ECOFUND/pubhtml",
     "templateFolderUrl": "https://drive.google.com/drive/folders/06_Van_ban_hanh_chinh"
